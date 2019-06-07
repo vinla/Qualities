@@ -5,6 +5,7 @@ SubwayZoneEntry(GameObject):
     Property: PlayerZone
     Effect: Set
     Value: Subway
+    Auto: true
 
 StreetZoneEntry(GameObject):
   BoxCollider:
@@ -13,6 +14,7 @@ StreetZoneEntry(GameObject):
     Property: PlayerZone
     Effect: Set
     Value: Streets
+    Auto: true
 
 Deductor(GameObject):
   GamePropertyConditionalActivator:
@@ -27,6 +29,7 @@ Deductor(GameObject):
       Property: TravelPass
       Effect: Decrement
       Value: 1
+      Auto: true
 
 DoorControl(GameObject):
   MultiPropertyConditionalActivator:
@@ -46,3 +49,31 @@ DoorControl(GameObject):
     TriggeredScript:
       OnEnter: OpenDoor
       OnLeave: CloseDoor
+
+TicketMachine(GameObject):
+  GamePropertyConditionalActivator:
+    Property: Currency
+    Condition: GreaterThan
+    Value: 4
+    Target: !BuyTicket
+  GamePropertyConditionalActivator:
+    Property: Currency
+    Condition: LessThan
+    Value: 5
+    Target: !NoMoney
+  BuyTicket(GameObject):
+    ButtonActivated:
+      Message: Buy travel pass (5c)
+      Action: ApplyMutations(Script)
+    GamePropertyMutator:
+      Property: Currency
+      Effect: Subtract
+      Value: 5
+      Auto: false
+    GamePropertyMutator:
+      Property: TravelPasses
+      Effect: Add
+      Value: 1
+      Auto: false
+  NoMoney(GameObject):
+    ShowMessage: Not enough credits (5c)
