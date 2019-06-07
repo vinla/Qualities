@@ -1,4 +1,4 @@
-namespace CorvusRex.Unity
+namespace VinlaTech.Unity
 {
     public enum MultiConditionalOperator
     {

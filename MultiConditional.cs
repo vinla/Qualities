@@ -1,25 +1,26 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CorvusRex.Unity
+namespace VinlaTech.Unity
 {
-    public class MultiConditional : MonoBehaviour
+    public class MultiConditionalActivator : MonoBehaviour
     {
         [SerializeField]
         private MultiConditionalOperator _condition;
-
+    
         [SerializeField]
-        private IConditional[] _dependantConditions;
+        private GameObject _target;
 
-        [SerializeField]
-        private UnityEvent _action;
+        private List<IConditional> _dependantConditions;
 
         private bool _result;
 
         public void OnEnable()
         {
+            _dependantConditions = gameObject.GetComponents<IConditional>().ToList();
             foreach(var dependant in _dependantConditions)
                 dependant.OnConditionChanged += DependantConditionChanged;
         }
@@ -44,8 +45,7 @@ namespace CorvusRex.Unity
             if (incomingResult != _result)
             {
                 _result = incomingResult;
-                if (_result && _action != null)
-                    _action.Invoke();                
+                _target.SetActive(_result);
             }
         }
 

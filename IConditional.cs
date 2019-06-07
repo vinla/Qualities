@@ -1,6 +1,6 @@
 using System;
 
-namespace CorvusRex.Unity
+namespace VinlaTech.Unity
 {
     public interface IConditional
     {
