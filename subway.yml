@@ -1,0 +1,48 @@
+SubwayZoneEntry(GameObject):
+  BoxCollider:
+    IsTrigger: true
+  GameProperyMutator:
+    Property: PlayerZone
+    Effect: Set
+    Value: Subway
+
+StreetZoneEntry(GameObject):
+  BoxCollider:
+    IsTrigger: true
+  GameProperyMutator:
+    Property: PlayerZone
+    Effect: Set
+    Value: Streets
+
+Deductor(GameObject):
+  GamePropertyConditionalActivator:
+    Property: PlayerZone
+    Condition: NotEqualTo
+    Value: Subway
+    Target: !Effect
+  Effect(GameObject):
+    BoxCollider:
+      IsTrigger: true
+    GamePropertyMutator:
+      Property: TravelPass
+      Effect: Decrement
+      Value: 1
+
+DoorControl(GameObject):
+  MultiPropertyConditionalActivator:
+    Criteria: AnyTrue
+    Target: !Effect
+  GamePropertyCondition:
+    Property: PlayerZone
+    Condition: EqualTo
+    Value: Subway
+  GamePropertyCondition:
+    Property: TravelPasses
+    Condition: GreaterThan
+    Value: 0
+  Effect(GameObject):
+    BoxCollider:
+      IsTrigger: true
+    TriggeredScript:
+      OnEnter: OpenDoor
+      OnLeave: CloseDoor
